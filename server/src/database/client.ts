@@ -5,9 +5,9 @@ import dotenv from "dotenv";
 dotenv.config();
 const config: PoolOptions = {
    host: process.env.DB_HOST || "localhost",
-   user: process.env.DB_USER || "livecoUser",
-   password: process.env.DB_PASSWORD || "123",
-   database: process.env.DB_NAME || "liveDB",
+   user: process.env.DB_USER || "root",
+   password: process.env.DB_PASSWORD || "Tolteque42",
+   database: process.env.DB_NAME || "livecoDB",
    port: process.env.DB_PORT ? parseInt(process.env.DB_PORT) : 3306,
 };
 

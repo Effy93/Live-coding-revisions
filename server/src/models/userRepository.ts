@@ -2,7 +2,7 @@ import  type { RowDataPacket, ResultSetHeader } from 'mysql2';
 import {db} from '../database/client';
 import type IUser from '../types/IUser';
 
-export default class User {
+class UserRepo {
     async create(user: Omit<IUser, "id" | "createdAt" | "updatedAt">) {
         const [result] = await db.query<ResultSetHeader>("INSERT INTO user(email, firstname, lastname, password) VALUES (?, ?, ?, ?)" 
             ,[user.email, user.firstname, user.lastname, user.password]
@@ -15,6 +15,10 @@ export default class User {
         return rows
     }
 
+    async readOne(id: number) {
+        const [row] = await db.query<RowDataPacket[]>("SELECT * from user WHERE id=?", [id])
+        return row
+    }
     async update() {}
 
     async delete(id : number) {
@@ -22,3 +26,5 @@ export default class User {
         return result.affectedRows > 0
     }
 }
+
+export default new UserRepo
