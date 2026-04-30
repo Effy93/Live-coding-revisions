@@ -9,12 +9,15 @@
     // See also https://aka.ms/tsconfig/module
     "module": "es2020",
     "target": "es2020",
-    "types": [],
+    "types": ["jest", "node"],
+    // "esModuleInterop": true,   
+      
     // For nodejs:
-    // "lib": ["esnext"],
-    // "types": ["node"],
+    "lib": ["es2020"],
     // and npm install -D @types/node
 
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
     // Other Outputs
     "sourceMap": true,
     "declaration": true,
@@ -35,11 +38,10 @@
     // Recommended Options
     "strict": true,
     "jsx": "react-jsx",
-    "verbatimModuleSyntax": true,
+    "verbatimModuleSyntax": false,
     "isolatedModules": true,
     "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
     "skipLibCheck": true,
-  },
-  // "include": ["database"],
+  }
 }
