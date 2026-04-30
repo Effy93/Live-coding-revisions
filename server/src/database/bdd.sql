@@ -1,5 +1,8 @@
--- Création de la table users
-CREATE TABLE IF NOT EXISTS users (
+-- Création de la table user
+CREATE database if not EXISTS livecoDB;
+use livecoDB;
+
+CREATE TABLE IF NOT EXISTS user (
   id INT PRIMARY KEY AUTO_INCREMENT,
   email VARCHAR(255) NOT NULL UNIQUE,
   firstName VARCHAR(100) NOT NULL,
