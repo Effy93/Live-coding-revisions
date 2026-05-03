@@ -1,27 +1,21 @@
-import { describe } from "node:test";
-import { db } from "../database/client";
-import type {ResultSetHeader} from "mysql2/promise";
+import { describe, it, expect, jest, afterEach } from "@jest/globals";
+import userRepository from "../models/userRepository";
 import UserController from "../controllers/UserController";
 import type { Request, Response } from "express";
 
-// ON test le controller
-// on mock le repo
-// simule les requetes et les reponses
+// Mock the userRepository
+jest.mock("../models/userRepository");
+
+const mockUserRepo = userRepository as jest.Mocked<typeof userRepository>;
 
 afterEach(() => {
-    jest.restoreAllMocks();
-  });
-
-jest.mock("../models/userRepository")
+    jest.clearAllMocks();
+});
 
 describe("UserController", () => {
 
     it("should create user", async () => {
-        // 1
-            // fausse reponse
-        const fakeResult = {insertId: 1} as ResultSetHeader
-
-            // fause user
+        // fausse user
         const fakeUser = {
             email: "eva@gmail.fr",
             firstname: "Eva",
@@ -29,8 +23,9 @@ describe("UserController", () => {
             password: "123"
         }
 
-        const querySpy = jest.spyOn(db, "query")
-        .mockResolvedValue([fakeResult, []]);
+        // Mock the repo methods
+        mockUserRepo.readByEmail.mockResolvedValue([]);
+        mockUserRepo.create.mockResolvedValue(1);
 
         // attendu par controller
         const req = {
@@ -39,13 +34,14 @@ describe("UserController", () => {
 
         const res = {
             status: jest.fn().mockReturnThis(),
-            json: jest.fn().mockReturnThis()
+            json: jest.fn()
         } as unknown as Response;
 
-        // execute 
-        const result = await UserController.add(req, res);
+        // execute
+        await UserController.add(req, res);
 
-        // Verifie
+        expect(mockUserRepo.readByEmail).toHaveBeenCalledWith(fakeUser.email);
+        expect(mockUserRepo.create).toHaveBeenCalledTimes(1);
         expect(res.status).toHaveBeenCalledWith(201);
         expect(res.json).toHaveBeenCalledWith({ id: 1, message: "Utilisateur créé avec succès" });
     })
